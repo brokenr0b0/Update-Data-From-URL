@@ -1,0 +1,54 @@
+Here on the cloud page you declare the values and do a lot of the heavy lifting.
+
+AMPSCRIPT
+
+<!-- AMPSCRIPT START -->
+%%[ 
+/* Define the variables */
+VAR @subkey, @response, @updateresult, @additionalUpdate
+
+/* SET the variables */
+SET @subkey = RequestParameter("skey") 
+SET @responseone = RequestParameter("response")
+
+/* Debugging */
+Output(concat("<br>SubscriberKey: ", @subkey))
+Output(concat("<br>ResponseOne: ", @responseone))
+
+/* Ensure subscriber exists */
+IF RowCount(LookupRows("dataextensiontocheckagainst", "SubscriberKey", @subkey)) > 0 THEN
+
+ /* Update Email_1_Response */
+ SET @updateresult = UpdateData("dataextensiontoupdateto", 1, "SubscriberKey", @subkey, "columnondataextension", @response)
+
+ /* Debug: Check if update worked */
+ Output(concat("<br>Response Update Result: ", @updateresult))
+
+ /* Update Additional resonpses and redirect if needed */
+ IF @response == "YES" THEN 
+ SET @additionalUpdate = UpdateData("dataextensiontoupdateto", 1, "SubscriberKey", @subkey, "columnondataextension", "Value")
+ Redirect("newurl\")
+
+ ELSEIF @responseone == "NO" THEN
+ SET @additionalUpdate = UpdateData("dataextensiontoupdateto", 1, "SubscriberKey", @subkey, "columnondataextension", "Value")
+ 
+ ENDIF
+
+ /* Debug: Check if Additional Update update worked */
+ Output(concat("<br>Additional Update Result: ", @additionalUpdate))
+
+ELSE
+ Output("<br>No matching SubscriberKey found in DE. No updates were made.")
+ENDIF
+]%%
+<!-- AMPSCRIPT END -->
+
+On the page itself you can also define content to load based on not only Member data, but based on the response they provided. 
+
+%%[ IF @response =="YES" THEN ]%%
+Content to display on a yes html, images, code etc.
+%%[ENDIF]%%
+
+%%[ IF @response =="NO" THEN ]%%
+Different content for that value 
+%%[ENDIF]%%
