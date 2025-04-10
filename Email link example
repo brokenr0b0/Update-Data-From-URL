@@ -1,0 +1,16 @@
+An email link example should include the page ID, subscriber information and the value you wish to capture. 
+
+This can be done as a big form capturing each value at the end on submit this is just an example of one of three values being captured. 
+
+The data extension will need a place to update the response which is the declaration in the link. the ### is your page ID number that you are directing the member to.
+
+Example of a YES response
+<a href="%%=CloudPagesURL(###, 'skey', SubscriberKey, 'response', 'YES')=%%"">Yes please</a>
+
+Example of a NO response
+<a href="%%=CloudPagesURL(###, 'skey', SubscriberKey, 'response', 'NO')=%%"">No thank you</a> 
+
+If you wish to also include analytics you can ammend a UTM parameters on the end by changing the link to 
+<a href="%=RedirectTo(CONCAT(CloudPagesURL(###,'skey',SubscriberKey, 'response', 'YES'),'&utm_source=placesourcehere&utm_medium=email&utm_campaign=ifpartoflargerjourney&utm_content=membershipspecificcontenthere'))=%%
+">Yes please with parameters</a>
+
